@@ -1,75 +1,137 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
-
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-
-export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
-  );
-}
+import React, { ReactNode } from "react";
+import {
+    Dimensions,
+    SafeAreaView,
+    StyleSheet,
+    View
+} from "react-native";
+import { MenuButton } from "../../components/Buttons";
+import ConnectDeviceDialog from "../ConnectDevice";
+import JoinDialog from "../JoinChalk";
+import JumpData from "../JumpData";
+import LetGo from "../LetGo";
+import PaxData from "./paxdata";
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
+
+    background: {
+        width: Dimensions.get("screen").width*.9,
+        height: Dimensions.get("screen").height*.8,
+        backgroundColor: "#243712",
+        marginBottom: "5%",
+       
+    },
+    menu:{ 
+        flex:1,  
+        flexDirection:"row",
+        backgroundColor: "#1A1A1A" ,
+        justifyContent: "center",
+        alignItems: "center",
+        flexWrap: "wrap",
+    },
+    menuItem: {
+        width: "50%",
+        height: "27%",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "#1A1A1A",
+        marginTop: "2.5%",
+    }
+})
+
+
+interface MainMenuState {
+    connectionHandler?: (state: boolean) => void,
+    connectionDialog: boolean
+    joinDialog: boolean,
+    paxDataDialog: boolean,
+    mainMenu: boolean,
+    letGoDialog: boolean,
+    jumpDataDialog: boolean
+
+}
+interface MainMenuProps {
+    connectionHandler: (state: boolean) => void
+    joinHandler: (state: {}) => void
+}
+export class MainMenu extends React.Component<MainMenuProps, MainMenuState>{
+    constructor(props: MainMenuProps) {
+        super(props)
+        this.state = {
+            connectionDialog: false,
+            joinDialog: false,
+            paxDataDialog: false,
+            letGoDialog: false,
+            mainMenu: true,
+            jumpDataDialog: false
+
+        }
+        this.handleJoinDialog = this.handleJoinDialog.bind(this);
+        this.handlePaxDataDialog = this.handlePaxDataDialog.bind(this);
+        this.handleConnectionDialog = this.handleConnectionDialog.bind(this);
+        this.handleLetGoDialog = this.handleLetGoDialog.bind(this);
+        this.handleJumpDataDialog = this.handleJumpDataDialog.bind(this);
+
+        this.connectionHandler = this.connectionHandler.bind(this);
+    }
+    handleJoinDialog(visible: boolean): void {
+        this.setState({ joinDialog: visible, mainMenu: !this.state.mainMenu })
+    }
+    handlePaxDataDialog(visible: boolean): void {
+        this.setState({ paxDataDialog: visible, mainMenu: !this.state.mainMenu })
+    }
+    handleConnectionDialog(visible: boolean) {
+        this.setState({ connectionDialog: visible, mainMenu: !this.state.mainMenu })
+    }
+    handleLetGoDialog(visible: boolean) {
+        this.setState({ letGoDialog: visible, mainMenu: !this.state.mainMenu })
+    }
+    handleJumpDataDialog(visible: boolean) {
+        this.setState({ jumpDataDialog: visible, mainMenu: !this.state.mainMenu })
+    }
+
+
+    connectionHandler(state: boolean): void {
+        this.setState({ connectionDialog: false, mainMenu: true })
+
+    }
+    menuList(): ReactNode {
+        return <View style={ styles.background}>
+            <View style={ styles.menu}>
+                <View style={styles.menuItem}>
+                    <MenuButton src={require("../../assets/images/connectDevice.png")} disabled={false} onPress={() => { this.handleConnectionDialog(true) }} />
+                </View>
+                <View style={styles.menuItem}>
+                    <MenuButton src={require("../../assets/images/joinChalk.png")} disabled={false} onPress={() => { this.handleJoinDialog(true) }} />
+                </View>
+                <View style={styles.menuItem}>
+                    <MenuButton  src={require("../../assets/images/testDevice.png")} disabled={false} onPress={() => { }} />
+                </View>
+                <View style={styles.menuItem}>
+                    <MenuButton src={require("../../assets/images/JumpData.png")} disabled={false} onPress={() => { this.handleJumpDataDialog(true) }} />
+                </View >
+                <View style={styles.menuItem} >
+                    <MenuButton  src={require("../../assets/images/PaxData.png")} disabled={false} onPress={() => { this.handlePaxDataDialog(true) }} />
+                </View>
+                <View  style={styles.menuItem}>
+                    <MenuButton src={require("../../assets/images/letGo.png")} disabled={false} onPress={() => { this.handleLetGoDialog(true) }} />
+                </View>
+            </View>
+        </View>
+
+    }
+
+    render(): React.ReactNode {
+        return <SafeAreaView style={{ flex:1, backgroundColor: "#243712", justifyContent: "center", alignItems: "center" }}>
+            {this.state.mainMenu && this.menuList()}
+            {this.state.connectionDialog && <ConnectDeviceDialog cameraActive={this.state.connectionDialog} connectionHandler={this.connectionHandler} handleVisible={this.handleConnectionDialog} />}
+            {this.state.joinDialog && <JoinDialog handleVisible={this.handleJoinDialog} />}
+            {this.state.paxDataDialog && <PaxData handleVisible={this.handlePaxDataDialog} />}
+            {this.state.letGoDialog && <LetGo deviceConnected={true} deviceIsTested={true} paxDataSet={true} joinedChalk={true} handleVisible={this.handleLetGoDialog} />}
+            {this.state.jumpDataDialog && <JumpData handleVisible={this.handleJumpDataDialog} />}
+
+        </SafeAreaView>
+    }
+}
+
+export default MainMenu;
