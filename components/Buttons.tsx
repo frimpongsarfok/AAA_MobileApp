@@ -7,6 +7,16 @@ const styles = StyleSheet.create({
         height: "100%",
         margin: "1%",
     },
+    closeButton: {
+        width: 35,
+        height: 30,
+    },
+    okButton: {
+        width: 45,
+        height: 40,
+        position: "absolute",
+    
+    },
     buttonViewImage: {
             flex:1, 
             width:null , 
@@ -43,7 +53,7 @@ export const MenuButton = (props: { disabled: boolean, src: any, onPress: () => 
 }
 
 export const CheckButton = (props: { disabled: boolean, callback: ()=>void }) => {
-    return <TouchableOpacity style={styles.button} disabled={props.disabled} onPress={props.callback}>
+    return <TouchableOpacity style={styles.okButton} disabled={props.disabled} onPress={props.callback}>
         <Image source={require("../assets/images/button_check.png")} style={styles.buttonViewImage}></Image>
     </TouchableOpacity>
 }
@@ -60,7 +70,7 @@ export const ListButton = (props: { disabled: boolean }) => {
     </TouchableOpacity>
 }
 export const CloseButton = (props: { disabled: boolean, onPress: () => void }) => {
-    return <TouchableOpacity style={[styles.button,{{height:"50px"}}]} onPress={props.onPress}>
+    return <TouchableOpacity style={[styles.closeButton]} onPress={props.onPress}>
         <Image source={require("../assets/images/close.png")} style={styles.buttonViewImage}/>
     </TouchableOpacity>
 }

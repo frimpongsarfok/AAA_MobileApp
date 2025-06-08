@@ -1,7 +1,9 @@
 
+import { View } from "react-native"
 import WifiManager from "react-native-wifi-reborn"
 import CameraScreen from "../components/CameraScreen"
 import { DialogBox, MESSAGETYPE } from "../components/DialogBox"
+import { TextBox } from "../components/Textboxes"
 // Add the 'esModuleInterop' flag to enable default imports
 import * as React from "react"
 
@@ -74,7 +76,9 @@ export default class ConnectDeviceDialog extends React.Component<ConnectDevicePr
         this.connectToWifi(ssid,password)
     }
     render(): React.ReactNode {
- 
+        const txtbox = <View key={0} style={{ marginTop: "10%" }}>
+            <TextBox value="" placeHolder="ENTER DEVICE ID" readonly={false} />
+        </View>
 
         const camera = <CameraScreen key={1} cameraActive={this.props.cameraActive} scanDevice={this.scanDevice} />
         const cameraView=<DialogBox header="CONNECT DEVICE" messageType={MESSAGETYPE.INPUT} message="--deviceConnection--" subView={[camera]} closeHandler={() => {

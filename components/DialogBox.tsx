@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
         height: Dimensions.get("screen").height*.8,
         marginBottom: "5%",
         opacity: 1,
+        padding: "1%",
     },
     successMessage: {
         color: "#8FD14F",
@@ -80,12 +81,18 @@ export class DialogBox extends React.Component<AlertDialogProps> {
                 alignItems: "center" 
                 }}>
             <View style={[styles.dialog]}>
-                <View style={[{ height: "20%",width: "100%", flexDirection: "row" }, this.props.messageType === MESSAGETYPE.INPUT ? {} : { direction: "rtl" }]}>
-                    <View style={{ width: "20%", height: "100%" }}>
-                        <View style={{ width: "15%", height: "90%",  marginBottom:"10%"}}>
-                            <CheckButton disabled={false} callback={() => { this.props.messageType === MESSAGETYPE.INPUT ? this.props.okHandler() : this.props.closeHandler() }} />
+                <View style={[{height: "10%",width: "100%", flexDirection: "row",justifyContent:"center" }, this.props.messageType === MESSAGETYPE.INPUT ? {} : { direction: "rtl" }]}>
+   
+                        <View style={{ width: "15%", height: "90%", }}>
+                            <CheckButton disabled={false} callback={() => { 
+                                if (this.props.messageType === MESSAGETYPE.INPUT && this.props.okHandler) {
+                                    this.props.okHandler();
+                                } else {
+                                    this.props.closeHandler();
+                                }
+                            }} />
                         </View>
-                    </View>
+  
                     <Text style={{ width: "60%", textAlign: "center", color: "#8FD14F", fontWeight: "800", fontSize: 30 }}>{this.props.header}</Text>
                     {this.props.messageType === MESSAGETYPE.INPUT && 
                     <View style={{ width: "20%", height: "80%", direction: "rtl" }}>
@@ -94,8 +101,19 @@ export class DialogBox extends React.Component<AlertDialogProps> {
                     </View >}
                 </View>
                 <View style={{ height: "90%", width: "100%", paddingBottom:"2%", backgroundColor: "#1A1A1A", }}>
-                    {this.props.messageType !== MESSAGETYPE.INPUT && <Text style={[{ textAlign: "center", margin: "2%", marginTop: "10%", justifyContent: "center", fontSize: 24, fontWeight: "bold", fontFamily: "Georgia-italic" }, textColor]}>{this.props.message}</Text>}
-                    {this.props.messageType == MESSAGETYPE.INPUT && this.props.subView}
+                    {this.props.messageType !== MESSAGETYPE.INPUT && <Text style={[{ 
+                        textAlign: "center", 
+                        margin: "2%", 
+                        marginTop: "10%", 
+                        justifyContent: "center", 
+                        fontSize: 24, 
+                        fontWeight: "bold", 
+                        fontFamily: "Georgia-italic" }, textColor]}>
+                            {this.props.message}
+                            </Text>}
+                    {this.props.messageType === MESSAGETYPE.INPUT && this.props.subView?.map((node, index) => (
+                        <React.Fragment key={index}>{node}</React.Fragment>
+                    ))}
                 </View>
                 <UnderLine/>
 
