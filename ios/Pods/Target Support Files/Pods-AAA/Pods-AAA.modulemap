@@ -1,0 +1,6 @@
+module Pods_AAA {
+  umbrella header "Pods-AAA-umbrella.h"
+
+  export *
+  module * { export * }
+}
